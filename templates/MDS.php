@@ -30,31 +30,38 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
     <ul class="navbar-nav"> 
-          <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
-            <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
-            <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-            <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
+      <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
+        <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+          <li class="nav-item dropdown"> 
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            MDS</a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" href="/MDS/1">General</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/MDS/2">Social Sciences</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/MDS/3">Computing</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/MDS/4">Medicine</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/MDS/5">Exact Sciences</a></li>
+            </ul>
+          </li>  
+            <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
             <a class="navbar-brand" href="Schedule.php">Schedule</a>
     </ul>
     </div>
   </div>
 </nav>
-<div>
-<img src="{{ url_for('static', filename='img/mds.png' ) }}" alt="MDS" />
-</div>
-<ul>
-        <li><a href="/MDS/1">Papers General</a></li>
-        <li><a href="/MDS/2">Social Sciences</a></li>
-        <li><a href="/MDS/3">Computing</a></li>
-        <li><a href="/MDS/4">Medicine</a></li>
-        <li><a href="/MDS/5">Exact Sciencies</a></li>
-</ul>
+<div class="container-img">
+<img src="{{ url_for('static', filename='img/mds.png' ) }}" alt="MDS" class="tam_imagen"/>
+</div> 
 </body>
 
 
 <footer>
 <p>
-Elaborado por: Estudiantes de la Universidad Politécnica Salesiana.
+Elaborated by: Students of the Salesian Polytechnic University.
 </p>
 </footer>
 

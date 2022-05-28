@@ -36,7 +36,7 @@
             <a class="navbar-brand" href="{{ url_for('documentos')}}" >Papers </a> 
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
                 <a class="navbar-brand" href="Schedule.php">Schedule</a>
         </ul>
         </div>
@@ -45,7 +45,11 @@
     
 <h1>Description of the project</h1>
 <p>
-
+In this document, a comparative analysis of the similarity of three main documents
+ with their fifteen references will be carried out using three variables (title, abstract and keywords). 
+ In this case, Visual Studio Code has been used, as it is an application that helps in the creation of 
+ programmes through Python, and the construction of the dataset was also carried out by the members of
+ the group themselves.
 
 </p>
 
@@ -57,7 +61,7 @@
 
 <footer>
 <p>
-Elaborado por: Estudiantes de la Universidad Politécnica Salesiana.
+Elaborated by: Students of the Salesian Polytechnic University.
 </p>
 </footer>
 

@@ -13,14 +13,18 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">   
     <script src="https://cdn.jsdelivr.net/npm/chart,js@2.9.4/dist/Chart.min.js"> </script>
+
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
+    <script src="{{ url_for('static', filename='scripts/canvas.js' ) }}"></script>
+
+    <title>Dendogram</title>
+
+</head> 
     <div class="logo">
         <img src="{{ url_for('static', filename='img/Logo.png' ) }}" alt="Logo Machine Learning" />
     </div> 
-    
-    <title>Dendogram</title>
-
-</head>
-<body>
+ 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('principal')}}">Index</a>
@@ -28,13 +32,13 @@
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-        <ul class="navbar-nav"> 
-            <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
-                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
-                <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
-                <a class="navbar-brand" href="Schedule.php">Schedule</a>
-        </ul>
+            <ul class="navbar-nav"> 
+                <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
+                    <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+                    <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
+                    <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+                    <a class="navbar-brand" href="Schedule.php">Schedule</a>
+            </ul>
         </div>
     </div>
     </nav>
@@ -57,42 +61,45 @@
         <li><a href="/dendo/16">Exact Sciencies --> Keywords</a></li>
         <li><a href="/dendo/17">Exact Sciencies --> Abstract</a></li>
     </ul>
-        <div>
-        <img src="{{ url_for('static', filename='img/mapa1.png' ) }}" alt="Heat Map" />
+
+    <body onmousedown="return false;">
+    <div id="wrapper">
+        <canvas id="myCanvas" width="900" height="400">
+        </canvas>
+        <div id="buttonWrapper">
+        <input type="button" id="plus" value="+"><input type="button" id="minus" value="-">
         </div>
+    </div> 
+
+
+        <!-- <div> 
+        <img src="{{ url_for('static', filename='img/mapa1.png' ) }}" alt="Heat Map" />
+        </div>-->
+
+
     <div id="salida_tabla"> 
        <table><tr>
-       {%for i in range(0, tam+1)%}
-             <td  >D{{i}}  </td>
-       {%endfor%}
-        </tr>
-         {%for i in range(0, tam)%}
-         <tr>
-                
-                <td  >D{{i+1}} </td>
-                
-            {%for j in range(0, tam)%}
-               
-                    <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">{{matriz_keywords[i][j]}}</td>
-                
-               
-               
-            {%endfor%}
-        </tr>
+        {%for i in range(0, tam+1)%}
+                <td  >D{{i}}  </td>
         {%endfor%}
-      </table>
+            </tr>
+            {%for i in range(0, tam)%}
+            <tr>
+                <td  >D{{i+1}} </td>
+                {%for j in range(0, tam)%}
+                <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">{{matriz_keywords[i][j]}}</td>
+                {%endfor%}
+            </tr>
+            {%endfor%}
+        </table>
     </div>
-    <canvas id="chart" width="900" height="400"> </canvas>
 
-    <script>
-        var ctx = document.getElementById("chart").getContext("2d")
-        
-    </script>
+
    
 </body>
 <footer>
 <p>
-Elaborado por: Estudiantes de la Universidad Politécnica Salesiana.
+Elaborated by: Students of the Salesian Polytechnic University. 
 </p>
 </footer>
 </html>

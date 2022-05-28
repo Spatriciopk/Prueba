@@ -30,11 +30,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
         <ul class="navbar-nav"> 
-            <a class="navbar-brand" href="Papers.php">Papers </a> 
-                <a class="navbar-brand" href="Dendrogram.php">Dendrogram</a>
-                <a class="navbar-brand" href="MDS.php">MDS</a>
-                <a class="navbar-brand" href="Wordmap.php">Wordmap</a>
-                <a class="navbar-brand" href="Schedule.php">Schedule</a>
+            <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
+                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+                <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+                <a class="navbar-brand" href="{{ url_for('documentos')}}">Schedule</a>
         </ul>
         </div>
     </div>
@@ -45,7 +45,7 @@
 
 <footer>
 <p>
-Elaborado por: Estudiantes de la Universidad Politécnica Salesiana.
+Elaborated by: Students of the Salesian Polytechnic University.
 </p>
 </footer>
 

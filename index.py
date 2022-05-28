@@ -1956,7 +1956,7 @@ def tot_grafo(num):
         ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
         for i in range(len(X_transform)):
             ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
-        ax.set_title("Metric MDS Generall Euclidean")
+        ax.set_title("Metric MDS General Euclidean")
         figure = ax.get_figure()
         figure.savefig('static/img/mds.png')
     elif(num =='2'):

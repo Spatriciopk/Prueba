@@ -17,7 +17,7 @@
         <img src="{{ url_for('static', filename='img/Logo.png' ) }}" alt="Logo Machine Learning" />
     </div>
     
-    <title>Wordmap</title>
+    <title>Cluster</title>
 
 </head>
 <body>
@@ -32,41 +32,55 @@
             <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
-                <a class="navbar-brand" href="Schedule.php">Schedule</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+                <a class="navbar-brand" href="    ">Schedule</a>
         </ul>
         </div>
     </div>
     </nav>
-    <div class="logo">
-        <img src="{{ url_for('static', filename='img/cluster.png' ) }}" alt="Logo Machine Learning" />
+    <div class="container-img">
+        <img src="{{ url_for('static', filename='img/cluster.png' ) }}" alt="Cluster" class="tam_imagen" />
     </div>
-    <div id="salida_tabla"> 
-       <table>
-         <thead>
-            <tr>
-                <th>ID</th>
-                <th class="tit">Titles</th>
-                <th class="cluster">Cluster</th>
-            </tr>
-         </thead>
-         {%for i in range(0, tam)%}
-         <tr>
-            
-            <td class="grupo{{clust[i]}}">{{i+1}}</td>
-            <td class="grupo{{clust[i]}}"> {{data[i]}}</td>
-            <td class="grupo{{clust[i]}}">{{clust[i]}}</td>
-            
-        </tr>
-        {%endfor%}
-      </table>
-    </div>  
+
+    <h1>CLUSTERING</h1>
+    <label><input type="checkbox" checked id="cbox0"> Cluster 0</label><br>
+    <label><input type="checkbox" checked id="cbox1"> Cluster 1</label><br>
+    <label><input type="checkbox" checked id="cbox2"> Cluster 2</label><br>
+    <label><input type="checkbox" checked id="cbox3"> Cluster 3</label><br>
+     
+
+    
+    <div id="salida_tabla">
+        <div style="height:325px;overflow:auto;"> 
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th class="tit" scope="col">Titles</th>
+                        <th class="cluster" scope="col">Cluster</th>
+                    </tr>
+                </thead>
+                {%for i in range(0, tam)%}
+                <tr>
+                    
+                    <th scope="col" class="grupo{{clust[i]}}">{{i+1}}</th>
+                    <td class="grupo{{clust[i]}}"> {{data[i]}}</td>
+                    <td class="grupo{{clust[i]}}">{{clust[i]}}</td>           
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </div> 
+    
+    
+    <script src="{{ url_for('static', filename='scripts/check_cluster.js' ) }}"> </script>
+
 </body>
 
 
 <footer>
 <p>
-Elaborado por: Estudiantes de la Universidad Politécnica Salesiana.
+Elaborated by: Students of the Salesian Polytechnic University.
 </p>
 </footer>
 </html>
