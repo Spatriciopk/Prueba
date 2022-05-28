@@ -54,8 +54,8 @@
           </ul>
         </li>
             <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
-            <a class="navbar-brand" href="MDS.php">MDS</a>
-            <a class="navbar-brand" href="Wordmap.php">Wordmap</a>
+            <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
+            <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
             <a class="navbar-brand" href="Schedule.php">Schedule</a>
     </ul>
     </div>

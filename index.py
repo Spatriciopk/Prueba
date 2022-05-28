@@ -16,6 +16,14 @@ import math
 import time
 import seaborn as sns
 import matplotlib.pyplot as plt
+import sklearn.datasets as dt
+from sklearn.manifold import MDS
+from matplotlib import pyplot as plt
+from sklearn.metrics.pairwise import manhattan_distances, euclidean_distances
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 
 n = stopwords.words("english")
 stemmer = PorterStemmer()
@@ -47,6 +55,11 @@ def importacion_columnas(columna):
     data = pd.read_csv(url)
     columna = data[columna].tolist()
     return columna
+
+def import_data_set():
+    url = "https://raw.githubusercontent.com/Freddy8-C/Proyecto_MachineLearning/master/csv/Proyecto.csv"
+    data = pd.read_csv(url)
+    return data
 
 def tokenizacion(lista):
     tit = []
@@ -1805,9 +1818,836 @@ def tot_dendogr(num):
         return render_template("Dendrogram.php",matriz_keywords = np.around(matriz_abs_50,2), tam =len(matriz_abs_50))
     
     
-         #Normalizacion
+@app.route('/MDS')
+def grafo():
+    return render_template("MDS.php")
+
+@app.route('/MDS/<num>')
+def tot_grafo(num):
+    abstract = importacion_columnas("Abstract")
+    titulos = importacion_columnas("Titles")
+    keyword = importacion_columnas("Keywords")
+    if(num == '1'):
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+        #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
 
         
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+        print()
+        #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+        print()
+        #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+        print()
+        #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+        print()
+        ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+        print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+        print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+        print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+        print()
+        ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        X_transform = mds.fit_transform(matriz_resultante)
+    
+    
+        # Get the embeddings
+        fig, ax = plt.subplots()
+        ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
+        for i in range(len(X_transform)):
+            ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
+        ax.set_title("Metric MDS Generall Euclidean")
+        figure = ax.get_figure()
+        figure.savefig('static/img/mds.png')
+    elif(num =='2'):
+        abstract = abstract[0:48]
+        titulos = titulos[0:48]
+        keyword = keyword[0:48]
+         #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+        #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+    
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+        
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+        print()
+        #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+        print()
+        #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+        print()
+        #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+        print()
+        ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+        print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+        print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+        print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+        print()
+        ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        X_transform = mds.fit_transform(matriz_resultante)
+    
+        # Get the embeddings
+        fig, ax = plt.subplots()
+        ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
+        for i in range(len(X_transform)):
+            ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
+        ax.set_title("Metric MDS Social Sciences Euclidean")
+        figure = ax.get_figure()
+        figure.savefig('static/img/mds.png')
+
+    elif(num=='3'):
+        abstract = abstract[48:96]
+        titulos = titulos[48:96]
+        keyword = keyword[48:96]
+         #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+        #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+    
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+        
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+        print()
+        #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+        print()
+        #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+        print()
+        #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+        print()
+        ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+        print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+        print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+        print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+        print()
+        ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        X_transform = mds.fit_transform(matriz_resultante)
+    
+        # Get the embeddings
+        fig, ax = plt.subplots()
+        ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
+        for i in range(len(X_transform)):
+            ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
+        ax.set_title("Metric MDS Computing Euclidean")
+        figure = ax.get_figure()
+        figure.savefig('static/img/mds.png')
+
+    elif(num=='4'):
+        abstract = abstract[96:144]
+        titulos = titulos[96:144]
+        keyword = keyword[96:144]
+         #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+        #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+    
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+        
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+        print()
+        #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+        print()
+        #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+        print()
+        #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+        print()
+        ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+        print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+        print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+        print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+        print()
+        ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        X_transform = mds.fit_transform(matriz_resultante)
+    
+        # Get the embeddings
+        fig, ax = plt.subplots()
+        ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
+        for i in range(len(X_transform)):
+            ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
+        ax.set_title("Metric MDS Medicine Euclidean")
+        figure = ax.get_figure()
+        figure.savefig('static/img/mds.png')
+    elif(num=='5'):
+        abstract = abstract[144:192]
+        titulos = titulos[144:192]
+        keyword = keyword[144:192]
+         #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+        #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+    
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+        
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+        print()
+        #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+        print()
+        #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+        print()
+        #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+        print()
+        ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+        print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+        print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+        print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+        print()
+        ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        X_transform = mds.fit_transform(matriz_resultante)
+    
+        # Get the embeddings
+        fig, ax = plt.subplots()
+        ax.scatter(X_transform[:,0], X_transform[:,1],color="green")
+        for i in range(len(X_transform)):
+            ax.annotate(str(i+1),(X_transform[i][0],X_transform[i][1]))
+        ax.set_title("Metric MDS Exact Sciencies Euclidean")
+        figure = ax.get_figure()
+        figure.savefig('static/img/mds.png')
+    
+    return render_template("MDS.php")
+
+@app.route('/Cluster')
+def cluster():
+    abstract = importacion_columnas("Abstract")
+    titulos = importacion_columnas("Titles")
+    keyword = importacion_columnas("Keywords")
+    titles_aux = importacion_columnas("Titles")
+         #Normalizacion
+
+    titulos = caracter_especiales(titulos)
+    titulos = minusculas(titulos)
+
+    keyword = caracter_especiales(keyword)
+    keyword = minusculas(keyword)
+
+    abstract = caracter_especiales(abstract)
+    abstract = minusculas(abstract)
+
+        #Tokenizacion
+
+    titulos = tokenizacion(titulos)
+    keyword = tokenizacion(keyword)
+    abstract = tokenizacion(abstract)
+
+        #Stopwords
+    titulos = eliminar_stop_words(titulos)
+    keyword = eliminar_stop_words(keyword)
+    abstract = eliminar_stop_words(abstract)
+
+        #Stemming
+
+    titulos = stemming(titulos)
+    keyword = stemming(keyword)
+    abstract = stemming(abstract)
+
+    
+    matriz = np.zeros((len(titulos), len(titulos)))
+    matriz_keywords = np.zeros((len(keyword), len(keyword)))
+    llenar_identidad(matriz)
+    llenar_identidad(matriz_keywords)
+    jacard(titulos,matriz)
+    jacard(keyword,matriz_keywords)
+    ##### Matriz de distancias de titulos ########
+    #print(matriz)
+        
+    ##### Matriz de distancias de keywords ########")
+    #print(matriz_keywords)
+    vocabulario = []
+    generar_vocabulario(abstract, vocabulario)
+    matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+    frecuencia = []
+    lista_wtf = [] 
+    lista_df = []   
+    lista_idf = []  
+    lista_tf_idf = []  
+    lista_modulo = [] 
+    lista_normal = []   
+    lista_abstract_final =[]   
+    frecuencias(vocabulario, abstract,frecuencia)
+        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+    llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+    llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+        #########Term Frecuency#############")
+        #print(matriz_df_idf)
+    print()
+        #########Weight Document Frecuency#############")
+    matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+    calcular_wtf(frecuencia, lista_wtf)
+    llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+    llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+        #print(matriz_wtf)
+    print()
+        #########Document Frecuency#############")
+    matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+    calcular_df(lista_wtf, lista_df,vocabulario)
+    llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+    llenar_matriz2(lista_df,matriz_df,"DF: ")
+        #print(matriz_df)
+    print()
+        #########Inverse Document Frecuency#############")
+    matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+    calcular_idf(lista_df, abstract, lista_idf)
+    llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+    llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+        #print(matriz_idf)
+    print()
+        ######### TF - IDF#############")
+    matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+    calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+    lista_tf_idf =redondear(lista_tf_idf)
+    llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+    llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+        #print(matriz_tf_idf)
+    print()
+        ######### Matriz de distancias abstract #############")
+        ####Modulo de la raiz normalizacion
+    modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+    lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+    lista_normal =redondear(lista_normal)
+
+        ###### Matriz de distancias Abstract #######
+
+    matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+    matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+    llenar_matriz_Distancias(matriz_distancia_abs)
+    llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+    llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+        #print(matriz_distancia_abs)
+    print()
+        ##### Matriz de distancias de titulos con 20%  ########")
+    matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+        #print(matriz_tit_20)
+    print()
+        ##### Matriz de distancias de keywords con 30%  ########")
+    matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+        #print(matriz_key_30)
+    print()
+        ######### Matriz de distancias abstract 50%#############")
+    matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+        #print(matriz_abs_50)
+    print()
+    matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+    matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+        #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+        #print(matriz_resultante)
+        #print(type(matriz_resultante))
+    columa =[]
+    llenardoc(len(matriz_resultante),columa)
+    mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+    X_transform = mds.fit_transform(matriz_resultante)
+    x, y = X_transform[:, 0], X_transform[:, 1]
+    fig, ax = plt.subplots()
+  
+    clustering = KMeans(n_clusters=4,max_iter=300) #se crea el modelo
+    clustering.fit(X_transform) #aplico al modleo creado
+  
+    print(X_transform)
+   
+   
+   
+    df = pd.DataFrame()
+   
+    for i in range(len(X_transform)):
+          df = df.append({'first_name': titles_aux[i]}, ignore_index=True) 
+    
+    df['KMeans_Clusters'] = clustering.labels_
+    pca = PCA(n_components=2)
+    pca_vinos = pca.fit_transform(X_transform)
+    pca_vinos_df = pd.DataFrame(data = pca_vinos, columns=["Component_1","Component_2"])
+    pca_nombres_vinos = pd.concat([pca_vinos_df,df[["KMeans_Clusters"]]],axis=1)
+    
+ 
+    ax.set_title("Clustering",fontsize=15)
+    color_theme = np.array(["blue","green","orange","red"])
+    ax.scatter(x =  pca_nombres_vinos.Component_1,y=pca_nombres_vinos.Component_2, c = color_theme[pca_nombres_vinos.KMeans_Clusters],s=20)
+    
+    figure = ax.get_figure()
+    figure.savefig('static/img/cluster.png')
+    
+ 
+    return render_template("Cluster.php",data=df['first_name'],clust=df['KMeans_Clusters'],tam=len(df['first_name']))
 
 
 if __name__ == '__main__':

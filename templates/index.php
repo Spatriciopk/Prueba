@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  
 
 <!-- LIBRERÍA BOOSTRAP -->
     
@@ -36,8 +35,8 @@
         <ul class="navbar-nav"> 
             <a class="navbar-brand" href="{{ url_for('documentos')}}" >Papers </a> 
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
-                <a class="navbar-brand" href="MDS.php">MDS</a>
-                <a class="navbar-brand" href="Wordmap.php">Wordmap</a>
+                <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
                 <a class="navbar-brand" href="Schedule.php">Schedule</a>
         </ul>
         </div>

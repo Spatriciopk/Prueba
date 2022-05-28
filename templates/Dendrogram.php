@@ -31,8 +31,8 @@
         <ul class="navbar-nav"> 
             <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
-                <a class="navbar-brand" href="MDS.php">MDS</a>
-                <a class="navbar-brand" href="Wordmap.php">Wordmap</a>
+                <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Wordmap</a>
                 <a class="navbar-brand" href="Schedule.php">Schedule</a>
         </ul>
         </div>
@@ -58,7 +58,7 @@
         <li><a href="/dendo/17">Exact Sciencies --> Abstract</a></li>
     </ul>
         <div>
-        <img src="{{ url_for('static', filename='img/mapa1.png' ) }}" alt="Logo Machine Learning" />
+        <img src="{{ url_for('static', filename='img/mapa1.png' ) }}" alt="Heat Map" />
         </div>
     <div id="salida_tabla"> 
        <table><tr>
