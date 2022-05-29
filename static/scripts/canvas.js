@@ -12,7 +12,7 @@ function draw(scale, translatePos) {
    context.beginPath(); // begin custom shape
    context.moveTo(0, 0); 
  
-   context.drawImage(img, 10,20,200,140)
+   context.drawImage(img, 0, 0)
    context.closePath(); // complete custom shape
  //   var grd = context.createLinearGradient(-59, -100, 81, 100);
  //   grd.addColorStop(0, "#8ED6FF"); // light blue

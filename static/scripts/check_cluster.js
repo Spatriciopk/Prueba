@@ -1,4 +1,3 @@
-var num =[0,0,0,0];
 var grupo0 = document.getElementById("grupo0");
 var grupo1 = document.getElementById("grupo1");
 var grupo2 = document.getElementById("grupo2");

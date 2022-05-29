@@ -1,7 +1,7 @@
-var num =[0,0,0];
 var tit = document.getElementById("tit");
 var key = document.getElementById("key");
 var asb = document.getElementById("asb");
+var iden = document.getElementById("iden");
 var checkbox = document.getElementById('cbox1');
 checkbox.addEventListener("change", validaCheckbox, false);
 function validaCheckbox()
@@ -11,12 +11,12 @@ function validaCheckbox()
     var els = document.querySelectorAll(".tit");
     for (var x = 0; x < els.length; x++)
         els[x].style.display = '';  
-    
+        
   }
   else{
     var els = document.querySelectorAll(".tit");
     for (var x = 0; x < els.length; x++)
-        els[x].style.display = 'none';
+        els[x].style.display = 'none'; 
   }
 }
 
@@ -55,4 +55,5 @@ function validaCheckbox2()
         els[x].style.display = 'none';
   }
 }
+ 
 

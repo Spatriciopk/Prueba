@@ -71,18 +71,46 @@
 
 
     <h1>PAPERS</h1>
-    <label><input type="checkbox" checked id="cbox1"> Show Title</label><br>
+    <!-- <input type="checkbox" class="btn-check" checked id="cbox1" />
+    <label class="btn btn-outline-dark"  for="cbox1" >Show Title</label>
+<br>
+    <input type="checkbox" class="btn-check" checked id="cbox2" />
+    <label class="btn btn-outline-dark"  for="cbox2" >Show Keywords</label>
+<br>
+    <input type="checkbox" class="btn-check" checked id="cbox3" />
+    <label class="btn btn-outline-dark"  for="cbox3" >Show Abstract</label> -->
+
+
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
+    <label class="form-check-label" for="cbox1">Show Title</label>
+  </div>
+<br>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
+    <label class="form-check-label" for="cbox2">Show Keywords</label>
+  </div>
+<br>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
+    <label class="form-check-label" for="cbox3">Show Abstract</label>
+  </div>
+<br>
+
+
+    <!-- <label><input type="checkbox" checked id="cbox1"> Show Title</label><br>
     <label><input type="checkbox" checked id="cbox2"> Show Keywords</label><br>
-    <label><input type="checkbox" checked id="cbox3"> Show Abstract</label><br>
+    <label><input type="checkbox" checked id="cbox3"> Show Abstract</label><br> -->
      
-  
+  <br>
+
     <div id="salida_tabla"> 
      <div class="table-responsive-xxl">
       <div style="height:300px;overflow:auto;">
        <table class="table table-striped table-hover">       
          <thead class="table-dark">
             <tr>
-                <th>ID</th>
+                <th class="iden">ID</th>
                 <th class="tit" scope="col">Titles</th>
                 <th class="key" scope="col">Keywords</th>
                 <th class="asb" scope="col">Abstract</th>
@@ -91,7 +119,7 @@
          {%for i in range(0, tam)%}
          <tr>
             
-            <th style="width:99px; text-align:center">{{i+1}}</th>
+            <th class="iden" style="width:99px; text-align:center">{{i+1}}</th>
             <td class="tit"  style="width:450px;">  {{titulos[i]}} </td>
             <td class="key" style="width:100px;"><div style="height:100px;overflow:auto;"> {{keyword[i]}} </div> </td>
             <td class="asb"> <div style="height:100px;overflow:auto;">  {{abstract[i]}}</div></td>

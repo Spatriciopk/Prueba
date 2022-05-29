@@ -43,12 +43,33 @@
     </div>
 
     <h1>CLUSTERING</h1>
-    <label><input type="checkbox" checked id="cbox0"> Cluster 0</label><br>
+    <!-- <label><input type="checkbox" checked id="cbox0"> Cluster 0</label><br>
     <label><input type="checkbox" checked id="cbox1"> Cluster 1</label><br>
     <label><input type="checkbox" checked id="cbox2"> Cluster 2</label><br>
-    <label><input type="checkbox" checked id="cbox3"> Cluster 3</label><br>
+    <label><input type="checkbox" checked id="cbox3"> Cluster 3</label><br> -->
      
 
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox0" checked>
+    <label class="form-check-label" for="cbox0">Cluster 0</label>
+</div>
+<br>    
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
+    <label class="form-check-label" for="cbox1">Cluster 1</label>
+</div>
+<br>
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
+    <label class="form-check-label" for="cbox2">Cluster 2</label>
+</div>
+<br>
+<div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
+    <label class="form-check-label" for="cbox3">Cluster 3</label>
+</div>
+<br>
+    
     
     <div id="salida_tabla">
         <div style="height:325px;overflow:auto;"> 
