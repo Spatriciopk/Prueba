@@ -13,14 +13,19 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">   
  
+
+    <!-- SCRIPTS -->
+    <script src="{{url_for('static', filename='scripts/canvas_cluster.js')}}"></script>
+
+
     <div class="logo">
-        <img src="{{ url_for('static', filename='img/Logo.png' ) }}" alt="Logo Machine Learning" />
+        <img src="{{url_for('static', filename='img/Logo.png')}}" alt="Logo Machine Learning" />
     </div>
     
     <title>Cluster</title>
 
 </head>
-<body>
+<body onmousedown="return false;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('principal')}}">Index</a>
@@ -33,43 +38,84 @@
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
                 <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-                <a class="navbar-brand" href="    ">Schedule</a>
+                <!-- <a class="navbar-brand" href="    ">Schedule</a> -->
         </ul>
         </div>
     </div>
     </nav>
-    <div class="container-img">
+ 
+
+    <!-- <div class="container-img">
         <img src="{{ url_for('static', filename='img/cluster.png' ) }}" alt="Cluster" class="tam_imagen" />
-    </div>
+    </div> -->
+ 
 
     <h1>CLUSTERING</h1>
-    <!-- <label><input type="checkbox" checked id="cbox0"> Cluster 0</label><br>
-    <label><input type="checkbox" checked id="cbox1"> Cluster 1</label><br>
-    <label><input type="checkbox" checked id="cbox2"> Cluster 2</label><br>
-    <label><input type="checkbox" checked id="cbox3"> Cluster 3</label><br> -->
-     
+<div class="container_leyenda">
+    <div class="titulo"> 
+        <div class="circulo"></div> 
+            <aside>     
+                Cluster 0
+            </aside>
+    </div>
+    <br>
+    <div class="titulo"> 
+        <div class="circulo1"></div> 
+            <aside>     
+                Cluster 1
+            </aside>
+    </div>
+    <br>
+    <div class="titulo"> 
+        <div class="circulo2"></div> 
+            <aside>       
+                Cluster 2
+            </aside>
+    </div>
+    <br>
+    <div class="titulo"> 
+        <div class="circulo3"></div> 
+            <aside>       
+                Cluster 3
+            </aside>
+    </div>
+</div>
+    <div id="wrapper" style="margin-top: 50px">
+        <canvas id="myCanvas1" width="800" height="500">
+        </canvas>
+        <div id="buttonWrapper">
+        <input type="button" id="plus" value="+"><input type="button" id="minus" value="-">
+        </div>
+    </div>  
 
-<div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="cbox0" checked>
-    <label class="form-check-label" for="cbox0">Cluster 0</label>
-</div>
-<br>    
-<div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
-    <label class="form-check-label" for="cbox1">Cluster 1</label>
-</div>
-<br>
-<div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
-    <label class="form-check-label" for="cbox2">Cluster 2</label>
-</div>
-<br>
-<div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
-    <label class="form-check-label" for="cbox3">Cluster 3</label>
-</div>
-<br>
-    
+
+
+<div class="magenTop" style="margin-top: 50px">     
+<div class="container_leyenda"> 
+    <div class="container_checkbox">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="cbox0" checked>
+            <label class="form-check-label" for="cbox0" id="text_cluster">Cluster 0</label>
+        </div>
+        <br>    
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
+            <label class="form-check-label" for="cbox1" id="text_cluster1">Cluster 1</label>
+        </div>
+        <br>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
+            <label class="form-check-label" for="cbox2" id="text_cluster2">Cluster 2</label>
+        </div>
+        <br>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
+            <label class="form-check-label" for="cbox3" id="text_cluster3">Cluster 3</label>
+        </div>
+        <br>
+    </div>
+</div> 
+</div>   
     
     <div id="salida_tabla">
         <div style="height:325px;overflow:auto;"> 

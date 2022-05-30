@@ -13,15 +13,17 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">   
  
+    <!-- SCRIPTS -->
+    <script src="{{url_for('static', filename='scripts/canvas_mds.js')}}"></script>
+
+    
     <div class="logo">
         <img src="{{ url_for('static', filename='img/Logo.png' ) }}" alt="Logo Machine Learning" />
     </div>
     
     <title>MDS</title>
 
-</head>
-<body>
-    
+</head> 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ url_for('principal')}}">Index</a>
@@ -48,17 +50,28 @@
             </ul>
           </li>  
             <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-            <a class="navbar-brand" href="Schedule.php">Schedule</a>
+            <!-- <a class="navbar-brand" href="Schedule.php">Schedule</a> -->
     </ul>
     </div>
   </div>
 </nav>
-<div class="container-img">
+<!-- <div class="container-img">
 <img src="{{ url_for('static', filename='img/mds.png' ) }}" alt="MDS" class="tam_imagen"/>
-</div> 
-</body>
+</div>  -->
 
 
+    <h1>MDS GENERAL</h1>
+    <body onmousedown="return false;">
+    <div id="wrapper" style="margin-top: 50px">
+        <canvas id="myCanvas" width="800" height="500">
+        </canvas>
+        <div id="buttonWrapper">
+        <input type="button" id="plus" value="+"><input type="button" id="minus" value="-">
+        </div>
+    </div>  
+ 
+
+</body> 
 <footer>
 <p>
 Elaborated by: Students of the Salesian Polytechnic University.

@@ -56,7 +56,7 @@
             <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
             <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
             <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-            <a class="navbar-brand" href="Schedule.php">Schedule</a>
+            <!-- <a class="navbar-brand" href="Schedule.php">Schedule</a> -->
     </ul>
     </div>
   </div>

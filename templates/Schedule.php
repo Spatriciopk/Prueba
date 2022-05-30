@@ -34,7 +34,7 @@
                 <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
                 <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-                <a class="navbar-brand" href="{{ url_for('documentos')}}">Schedule</a>
+                <!-- <a class="navbar-brand" href="{{ url_for('documentos')}}">Schedule</a> -->
         </ul>
         </div>
     </div>
