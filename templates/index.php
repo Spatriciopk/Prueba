@@ -16,6 +16,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> 
 <!-- Estilos -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Estilo_botones.css' ) }}">
+<!-- Script --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+
+
+
 
 <div class="logo">
     <img src="{{ url_for('static', filename='img/Logo.png' ) }}" alt="Logo Machine Learning" />
@@ -43,8 +49,9 @@
     </div>
     </nav>
     
-<h1>Description of the project</h1>
-<p>
+<h1>DESCRIPTION OF THE PROJECT</h1>
+<div id="abstract"> 
+    <div id="abstract1">
 In this document a comparative analysis of the similarity of three main documents will be carried out,
 which are the following: social sciences, computer science, medicine, and exact sciences with their 
 fifteen references, using three variables (title, summary and keywords). <br>
@@ -58,8 +65,40 @@ In this case, Visual Studio Code has been used, as it is an application that hel
  programs through Python, and the construction of the dataset was also made by the members of the group
   themselves, it contains different diagrams to have a better abstraction of the program and the project
    in general, to understand each of the implemented algorithms.
+   </div>
+</div> 
 
-</p>
+    <div class="sticky-container">
+        <ul class="sticky">
+            <li>
+            <i class="bi bi-github"></i>
+                <p><a href="https://github.com/Spatriciopk/Prueba" target="_blank">Github Repository  <br>Project </a></p>
+            </li>
+            <li>
+            <i class="bi bi-git"></i>
+                <p><a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Github Repository <br>CSV </a></p>
+            </li>
+
+            <li>
+            <i class="bi bi-globe"></i>
+                <p><a href="https://machinlearning2.herokuapp.com/" target="_blank">Website Machine <br> Learning </a></p>
+            </li> 
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="10" height="10">
+                <p><a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website Flask</a></p>
+            </li>
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="32" height="32">
+                <p><a href="https://www.heroku.com/" target="_blank">Website Heroku</a></p>
+            </li>
+            <li>
+                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="32" height="32">
+                <p><a href="https://code.visualstudio.com/" target="_blank">Website Visual <br> Studio Code</a></p>
+            </li>
+        </ul>
+    </div>
 
 
 

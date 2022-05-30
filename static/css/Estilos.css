@@ -9,6 +9,15 @@ img{
     height: 290px;
 }
 
+#abstract { 
+  margin:0px auto;
+  width:80%;  
+}
+
+#abstract1{ 
+    margin:0px auto; 
+}
+
 
 /* Menu navegacion */
 /* ul {

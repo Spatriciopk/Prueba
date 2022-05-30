@@ -12,7 +12,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">    
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilo_botones.css' ) }}">
+    <!-- SCRIPT  -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart,js@2.9.4/dist/Chart.min.js"> </script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+    
 
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
@@ -99,7 +103,7 @@
         </div>
     </nav> 
 
-    <h1>Dendrogram</h1>
+    <h1>DENDROGRAM</h1>
     <body onmousedown="return false;">
     <div id="wrapper" style="margin-top: 50px">
         <canvas id="myCanvas" width="800" height="500">
@@ -129,15 +133,64 @@
             
               
                 {%for j in range(0, tam)%}
-                <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">{{matriz_keywords[i][j]}}</td>
+                <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">
+                    {{
+                        
+                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">   
+                        matriz_keywords[i][j]
+                                </a>        
+                    }}</td>
                 {%endfor%}
             </tr>
             {%endfor%}
         </table>
+
+<!-- 
+        <div class="row">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+      <div class="card card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+      </div>
+    </div>
+  </div> -->
+
         </div>
         </div>
     </div>
 </div>
+
+<div class="sticky-container">
+        <ul class="sticky">
+            <li>
+            <i class="bi bi-github"></i>
+                <p><a href="https://github.com/Spatriciopk/Prueba" target="_blank">Github Repository  <br>Project </a></p>
+            </li>
+            <li>
+            <i class="bi bi-git"></i>
+                <p><a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Github Repository <br>CSV </a></p>
+            </li>
+
+            <li>
+            <i class="bi bi-globe"></i>
+                <p><a href="https://machinlearning2.herokuapp.com/" target="_blank">Website Machine <br> Learning </a></p>
+            </li> 
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="10" height="10">
+                <p><a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website Flask</a></p>
+            </li>
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="32" height="32">
+                <p><a href="https://www.heroku.com/" target="_blank">Website Heroku</a></p>
+            </li>
+            <li>
+                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="32" height="32">
+                <p><a href="https://code.visualstudio.com/" target="_blank">Website Visual <br> Studio Code</a></p>
+            </li>
+        </ul>
+    </div>
 
    
 </body>

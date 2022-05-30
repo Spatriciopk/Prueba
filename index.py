@@ -1947,7 +1947,7 @@ def tot_grafo(num):
         print()
         matriz_aux = np.add(matriz_tit_20,matriz_key_30)
         matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
         X_transform = mds.fit_transform(matriz_resultante)
     
     
@@ -2079,7 +2079,7 @@ def tot_grafo(num):
         print()
         matriz_aux = np.add(matriz_tit_20,matriz_key_30)
         matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
         X_transform = mds.fit_transform(matriz_resultante)
     
         # Get the embeddings
@@ -2211,7 +2211,7 @@ def tot_grafo(num):
         print()
         matriz_aux = np.add(matriz_tit_20,matriz_key_30)
         matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
         X_transform = mds.fit_transform(matriz_resultante)
     
         # Get the embeddings
@@ -2343,7 +2343,7 @@ def tot_grafo(num):
         print()
         matriz_aux = np.add(matriz_tit_20,matriz_key_30)
         matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
         X_transform = mds.fit_transform(matriz_resultante)
     
         # Get the embeddings
@@ -2474,7 +2474,7 @@ def tot_grafo(num):
         print()
         matriz_aux = np.add(matriz_tit_20,matriz_key_30)
         matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+        mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
         X_transform = mds.fit_transform(matriz_resultante)
     
         # Get the embeddings
@@ -2615,7 +2615,7 @@ def cluster():
         #print(type(matriz_resultante))
     columa =[]
     llenardoc(len(matriz_resultante),columa)
-    mds = MDS(metric=True, dissimilarity='precomputed', random_state=0)
+    mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
     X_transform = mds.fit_transform(matriz_resultante)
     x, y = X_transform[:, 0], X_transform[:, 1]
     fig, ax = plt.subplots()

@@ -12,11 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> 
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilos.css' ) }}">   
- 
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Estilo_botones.css' ) }}">
     <!-- SCRIPTS -->
     <script src="{{url_for('static', filename='scripts/canvas_cluster.js')}}"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
 
     <div class="logo">
         <img src="{{url_for('static', filename='img/Logo.png')}}" alt="Logo Machine Learning" />
@@ -139,6 +138,38 @@
         </div>
     </div> 
     
+    <div class="sticky-container">
+        <ul class="sticky">
+            <li>
+            <i class="bi bi-github"></i>
+                <p><a href="https://github.com/Spatriciopk/Prueba" target="_blank">Github Repository  <br>Project </a></p>
+            </li>
+            <li>
+            <i class="bi bi-git"></i>
+                <p><a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Github Repository <br>CSV </a></p>
+            </li>
+
+            <li>
+            <i class="bi bi-globe"></i>
+                <p><a href="https://machinlearning2.herokuapp.com/" target="_blank">Website Machine <br> Learning </a></p>
+            </li> 
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="10" height="10">
+                <p><a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website Flask</a></p>
+            </li>
+
+            <li>
+                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="32" height="32">
+                <p><a href="https://www.heroku.com/" target="_blank">Website Heroku</a></p>
+            </li>
+            <li>
+                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="32" height="32">
+                <p><a href="https://code.visualstudio.com/" target="_blank">Website Visual <br> Studio Code</a></p>
+            </li>
+        </ul>
+    </div>
+
     
     <script src="{{ url_for('static', filename='scripts/check_cluster.js' ) }}"> </script>
 

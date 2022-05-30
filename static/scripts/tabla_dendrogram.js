@@ -1,0 +1,1 @@
+var obtener=document.getElementById("script");
