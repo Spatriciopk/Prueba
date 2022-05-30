@@ -2628,11 +2628,25 @@ def cluster():
    
    
     df = pd.DataFrame()
-   
+    cont=0
+    cont1=0
+    cont2=0
+    cont3=0
     for i in range(len(X_transform)):
           df = df.append({'first_name': titles_aux[i]}, ignore_index=True) 
     
     df['KMeans_Clusters'] = clustering.labels_
+    for i in range (len(df['KMeans_Clusters'])):
+        if df['KMeans_Clusters'][i] == 0:
+            cont=cont+1
+        if df['KMeans_Clusters'][i] == 1:
+            cont1=cont1+1
+        if df['KMeans_Clusters'][i] == 2:
+            cont2=cont2+1
+        if df['KMeans_Clusters'][i] == 3:
+            cont3=cont3+1            
+                    
+
     pca = PCA(n_components=2)
     pca_vinos = pca.fit_transform(X_transform)
     pca_vinos_df = pd.DataFrame(data = pca_vinos, columns=["Component_1","Component_2"])
@@ -2647,7 +2661,7 @@ def cluster():
     figure.savefig('static/img/cluster.png')
     
  
-    return render_template("Cluster.php",data=df['first_name'],clust=df['KMeans_Clusters'],tam=len(df['first_name']))
+    return render_template("Cluster.php",data=df['first_name'],clust=df['KMeans_Clusters'],tam=len(df['first_name']),cont=cont,cont1=cont1,cont2=cont2,cont3=cont3)
 
 
 if __name__ == '__main__':

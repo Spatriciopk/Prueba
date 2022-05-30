@@ -89,27 +89,29 @@
 
 
 
+
+
 <div class="magenTop" style="margin-top: 50px">     
 <div class="container_leyenda"> 
     <div class="container_checkbox">
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="cbox0" checked>
-            <label class="form-check-label" for="cbox0" id="text_cluster">Cluster 0</label>
+            <label class="form-check-label" for="cbox0" id="text_cluster">Cluster 0 = {{cont}}  </label>
         </div>
         <br>    
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
-            <label class="form-check-label" for="cbox1" id="text_cluster1">Cluster 1</label>
+            <label class="form-check-label" for="cbox1" id="text_cluster1">Cluster 1 = {{cont1}} </label>
         </div>
         <br>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
-            <label class="form-check-label" for="cbox2" id="text_cluster2">Cluster 2</label>
+            <label class="form-check-label" for="cbox2" id="text_cluster2">Cluster 2 = {{cont2}}</label>
         </div>
         <br>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
-            <label class="form-check-label" for="cbox3" id="text_cluster3">Cluster 3</label>
+            <label class="form-check-label" for="cbox3" id="text_cluster3">Cluster 3 = {{cont3}}</label>
         </div>
         <br>
     </div>
@@ -142,33 +144,33 @@
         <ul class="sticky">
             <li>
             <i class="bi bi-github"></i>
-                <p><a href="https://github.com/Spatriciopk/Prueba" target="_blank">Github Repository  <br>Project </a></p>
+                <a href="https://github.com/Spatriciopk/Prueba" target="_blank">Repository<br>Project </a> 
             </li>
             <li>
             <i class="bi bi-git"></i>
-                <p><a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Github Repository <br>CSV </a></p>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <p><a href="https://machinlearning2.herokuapp.com/" target="_blank">Website Machine <br> Learning </a></p>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
             </li> 
 
             <li>
-                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="10" height="10">
-                <p><a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website Flask</a></p>
+                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="25" height="25">
+                <a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website<br>Flask</a>
             </li>
 
             <li>
-                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="32" height="32">
-                <p><a href="https://www.heroku.com/" target="_blank">Website Heroku</a></p>
+                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="25" height="25">
+                <a href="https://www.heroku.com/" target="_blank">Website<br>Heroku</a>
             </li>
             <li>
-                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="32" height="32">
-                <p><a href="https://code.visualstudio.com/" target="_blank">Website Visual <br> Studio Code</a></p>
+                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="25" height="25">
+                <a href="https://code.visualstudio.com/" target="_blank"> Visual<br>Studio Code</a>
             </li>
         </ul>
-    </div>
+    </div> 
 
     
     <script src="{{ url_for('static', filename='scripts/check_cluster.js' ) }}"> </script>

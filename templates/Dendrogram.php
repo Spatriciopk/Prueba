@@ -116,9 +116,16 @@
 
 <!-- <div style="margin-left: 50px; margin-right:50px"> -->
     <div>
+
+        <div class="alert alert-dark" role="alert" style="margin-top: 20px;">
+            <div id="Resultado" style="text-align:center"></div>
+        </div>
+
+
     <div id="salida_tabla"> 
     <div class="table-responsive-xxl">
     <div style="width:80%; height:400px;overflow:auto; margin: 0 auto; margin-top:30px; cursor:pointer">
+    
        <table class="table table-striped table-hover">
        <thead class="table-dark"> 
             <tr>
@@ -133,28 +140,11 @@
             
               
                 {%for j in range(0, tam)%}
-                <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">
-                    {{
-                        
-                        <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">   
-                        matriz_keywords[i][j]
-                                </a>        
-                    }}</td>
+                <td class ="script" id="{{i,j,matriz_keywords[i][j]}}">{{matriz_keywords[i][j]}}</td>
                 {%endfor%}
             </tr>
             {%endfor%}
         </table>
-
-<!-- 
-        <div class="row">
-  <div class="col">
-    <div class="collapse multi-collapse" id="multiCollapseExample1">
-      <div class="card card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-      </div>
-    </div>
-  </div> -->
-
         </div>
         </div>
     </div>
@@ -164,35 +154,36 @@
         <ul class="sticky">
             <li>
             <i class="bi bi-github"></i>
-                <p><a href="https://github.com/Spatriciopk/Prueba" target="_blank">Github Repository  <br>Project </a></p>
+                <a href="https://github.com/Spatriciopk/Prueba" target="_blank">Repository<br>Project </a> 
             </li>
             <li>
             <i class="bi bi-git"></i>
-                <p><a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Github Repository <br>CSV </a></p>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <p><a href="https://machinlearning2.herokuapp.com/" target="_blank">Website Machine <br> Learning </a></p>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
             </li> 
 
             <li>
-                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="10" height="10">
-                <p><a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website Flask</a></p>
+                <img src="{{ url_for('static', filename='img/Flask.png')}}" width="25" height="25">
+                <a href="https://flask.palletsprojects.com/en/2.1.x/installation/" target="_blank">Website<br>Flask</a>
             </li>
 
             <li>
-                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="32" height="32">
-                <p><a href="https://www.heroku.com/" target="_blank">Website Heroku</a></p>
+                <img src="{{ url_for('static', filename='img/Heroku.png')}}" width="25" height="25">
+                <a href="https://www.heroku.com/" target="_blank">Website<br>Heroku</a>
             </li>
             <li>
-                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="32" height="32">
-                <p><a href="https://code.visualstudio.com/" target="_blank">Website Visual <br> Studio Code</a></p>
+                <img src="{{ url_for('static', filename='img/VisualSC.png')}}" width="25" height="25">
+                <a href="https://code.visualstudio.com/" target="_blank"> Visual<br>Studio Code</a>
             </li>
         </ul>
-    </div>
+    </div> 
 
-   
+    <script src="{{ url_for('static', filename='scripts/tabla_dendrogram.js' ) }}">  </script> 
+
 </body>
 <footer>
 <p>
