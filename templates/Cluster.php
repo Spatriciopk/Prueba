@@ -51,10 +51,16 @@
 
     <h1>DENDROGRAM</h1>
     <div>
+        <a href="/Cluster/1"> General</a>
+        <a href="/Cluster/2"> Social Sciences </a>
+        <a href="/Cluster/3"> Computing </a>
+        <a href="/Cluster/4"> Medicine </a>
+        <a href="/Cluster/5"> Exact Sciences </a>
+
 <form action="" method="post">
 
         <label for="name">Grupos: </label>
-        <input type="number" id="name"  step="0.5" pattern="^\d*(\.\d{0,2})?$" name="name" min=1 required /><br>
+        <input type="number" id="name"  step="0.01" pattern="^\d*(\.\d{0,2})?$" name="name" min=1 required /><br>
         <input type="submit" id="send-signup" name="signup" value="Enviar" />
 </form>
 </div>

@@ -61,6 +61,17 @@
 
 
     <h1>METRIC MDS EUCLIDEAN</h1>
+    <form action="" method="post">
+
+        
+        <label for="cars">Tipo de distancia:</label>
+  <select id="carlist" name="carlist">
+    <option value="euclidean">Euclidean</option>
+    <option value="precomputed">Precomputed</option>
+    <option value="manhattan">Manhattan</option>
+  </select>
+        <input type="submit" id="send-signup" name="signup" value="Enviar" />
+</form>
     <body onmousedown="return false;">
     <div id="wrapper" style="margin-top: 50px">
         <canvas id="myCanvas" width="800" height="500">
