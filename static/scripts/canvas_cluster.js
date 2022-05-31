@@ -11,7 +11,7 @@ function draw1(scale, translatePos) {
    context.scale(scale, scale);
    context.beginPath(); // begin custom shape 
   
-   context.drawImage(img,10,-250,750,475)
+   context.drawImage(img,10,-250,400,475)
    context.closePath();  
   
    context.lineWidth = 5;

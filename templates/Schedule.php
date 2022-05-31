@@ -23,21 +23,20 @@
     <title>Schedule</title>
 
 </head>
-    <body>
-
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">Index</a>
+        <a class="navbar-brand" href="{{ url_for('principal')}}">Index</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
         <ul class="navbar-nav"> 
-            <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
-                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+            <a class="navbar-brand" href="{{ url_for('documentos')}}" >Papers </a> 
+            <a class="navbar-brand" href="{{ url_for('dendograma')}}">Heart Map</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-                <!-- <a class="navbar-brand" href="{{ url_for('documentos')}}">Schedule</a> -->
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Dendrogram</a>
+                <a class="navbar-brand" href="Schedule.php">Schedule</a>  
         </ul>
         </div>
     </div>
@@ -53,12 +52,12 @@
             </li>
             <li>
             <i class="bi bi-git"></i>
-               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Repository<br>CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine Learning</a>
             </li> 
 
             <li>

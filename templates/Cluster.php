@@ -34,9 +34,9 @@
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
         <ul class="navbar-nav"> 
             <a class="navbar-brand" href="{{ url_for('documentos')}}">Papers </a> 
-                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Heart Map</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Dendogram</a>
                 <!-- <a class="navbar-brand" href="    ">Schedule</a> -->
         </ul>
         </div>
@@ -49,7 +49,7 @@
     </div> -->
  
 
-    <h1>CLUSTERING</h1>
+    <h1>DENDROGRAM</h1>
     <div>
 <form action="" method="post">
 
@@ -59,7 +59,7 @@
 </form>
 </div>
     <div id="wrapper" style="margin-top: 50px">
-        <canvas id="myCanvas1" width="800" height="500">
+        <canvas id="myCanvas1" width="400" height="475">
         </canvas>
         <div id="buttonWrapper">
         <input type="button" id="plus" value="+"><input type="button" id="minus" value="-">
@@ -75,8 +75,8 @@
 </style>
 
 <div class="magenTop" style="margin-top: 50px">     
-<div class="container_leyenda"> 
-    <div class="container_checkbox">
+<div class="container_leyenda2"> 
+    <div class="container_checkbox" style="height:325px;overflow:auto;">
     {%for i in range(0, tam2)%}
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="{{resultantList[i]}}" checked>
@@ -95,7 +95,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
-                        <th class="tit" scope="col">Titles</th>
+                        <th class="tit" scope="col" style="width:300px;">Titles</th>
                         <th class="cluster" scope="col">Cluster</th>
                     </tr>
                 </thead>
@@ -103,8 +103,8 @@
                 <tr>
                     
                     <th scope="col" class="grupo{{clust[i]}}">{{i+1}}</th>
-                    <td class="grupo{{clust[i]}}"> {{data[i]}}</td>
-                    <td class="grupo{{clust[i]}}">{{clust[i]}}</td>           
+                    <td style="width:500px;" class="grupo{{clust[i]}}"> {{data[i]}}</td>
+                    <td style="text-align:center" class="grupo{{clust[i]}}">{{clust[i]}}</td>               
                 </tr>
                 {%endfor%}
             </table>
@@ -119,12 +119,12 @@
             </li>
             <li>
             <i class="bi bi-git"></i>
-               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Repository<br>CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine Learning</a>
             </li> 
 
             <li>

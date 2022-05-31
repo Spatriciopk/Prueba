@@ -24,7 +24,7 @@
     <script src="{{ url_for('static', filename='scripts/dropdown_dendrogram.js' ) }}">  </script> 
 
 
-    <title>Dendogram</title>
+    <title>Heart Map</title>
 
 </head> 
     <div class="logo">
@@ -47,7 +47,7 @@
                 
                 
                 
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Dendrogram</a>
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Heart Map</a>
                 <ul class="dropdown-menu dropdown-menu-dark">
 
                     <li><a class="dropdown-item" href="/dendo/1">Papers General</a></li>                    
@@ -65,7 +65,7 @@
 
 
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"> Computing &raquo; </a>
+                    <li><a class="dropdown-item" href="#">Computing &raquo; </a>
                         <ul class="submenu dropdown-menu">
                             <li><a class="dropdown-item" href="/dendo/6">General all</a></li>
                             <li><a class="dropdown-item" href="/dendo/7">Titles</a></li>
@@ -96,17 +96,17 @@
 				</ul>
               </li> 
                     <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                    <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+                    <a class="navbar-brand" href="{{ url_for('cluster')}}">Dendogram</a>
                     <!-- <a class="navbar-brand" href="Schedule.php">Schedule</a> -->
             </ul>
            </div> 
         </div>
     </nav> 
 
-    <h1>DENDROGRAM</h1>
+    <h1>HEART MAP</h1>
     <body onmousedown="return false;">
     <div id="wrapper" style="margin-top: 50px">
-        <canvas id="myCanvas" width="800" height="500">
+        <canvas id="myCanvas" width="400" height="475">
         </canvas>
         <div id="buttonWrapper">
         <input type="button" id="plus" value="+"><input type="button" id="minus" value="-">
@@ -158,12 +158,12 @@
             </li>
             <li>
             <i class="bi bi-git"></i>
-               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Repository<br>CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine Learning</a>
             </li> 
 
             <li>

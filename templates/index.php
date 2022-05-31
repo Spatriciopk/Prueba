@@ -22,11 +22,11 @@
 
 
 
-<link  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<!-- <link  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 <link  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 <link  href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-
+ -->
 
 
 
@@ -47,35 +47,26 @@
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
         <ul class="navbar-nav"> 
             <a class="navbar-brand" href="{{ url_for('documentos')}}" >Papers </a> 
-                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+                <a class="navbar-brand" href="{{ url_for('dendograma')}}">Heart Map</a>
                 <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-                <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
-                <!-- <a class="navbar-brand" href="Schedule.php">Schedule</a> -->
+                <a class="navbar-brand" href="{{ url_for('cluster')}}">Dendogram</a>
+                <a class="navbar-brand" href="Schedule.php">Schedule</a>  
         </ul>
         </div>
     </div>
     </nav>
     
-<h1>DESCRIPTION OF THE PROJECT</h1>
-<div id="abstract"> 
-    <div id="abstract1">
-In this document a comparative analysis of the similarity of three main documents will be carried out,
-which are the following: social sciences, computer science, medicine, and exact sciences with their 
-fifteen references, using three variables (title, summary and keywords). <br>
-Once the database is made, we proceed to make the processes and analysis of the documents with the 
-same topics, each document goes through the NLP process, to obtain a database ready to use, then the
- process of similarity between documents of the same type, distance matrix of documents, graphs to 
- indicate the distance matrix of the entire database and each document, also runs a clustering task 
- using the DHC algorithm with the purpose that each document must show some graph that identifies the 
- resulting articles and a list with the titles of the articles of each group. <br>
-In this case, Visual Studio Code has been used, as it is an application that helps the creation of
- programs through Python, and the construction of the dataset was also made by the members of the group
-  themselves, it contains different diagrams to have a better abstraction of the program and the project
-   in general, to understand each of the implemented algorithms.
-   </div>
-</div> 
+ 
 
-       <div class="sticky-container">
+
+
+
+
+
+
+
+
+    <div class="sticky-container">
         <ul class="sticky">
             <li>
             <i class="bi bi-github"></i>
@@ -83,12 +74,12 @@ In this case, Visual Studio Code has been used, as it is an application that hel
             </li>
             <li>
             <i class="bi bi-git"></i>
-               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Repository<br>CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine Learning</a>
             </li> 
 
             <li>
@@ -105,7 +96,7 @@ In this case, Visual Studio Code has been used, as it is an application that hel
                 <a href="https://code.visualstudio.com/" target="_blank"> Visual<br>Studio Code</a>
             </li>
         </ul>
-    </div>      
+    </div> 
 
 
     <!-- <ul class="sticky-social-bar">

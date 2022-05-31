@@ -55,9 +55,9 @@
             <li><a class="dropdown-item" href="/doc/5">Exact Sciences</a></li>
           </ul>
         </li>
-            <a class="navbar-brand" href="{{ url_for('dendograma')}}">Dendrogram</a>
+            <a class="navbar-brand" href="{{ url_for('dendograma')}}">Heart Map</a>
             <a class="navbar-brand" href="{{ url_for('grafo')}}">MDS</a>
-            <a class="navbar-brand" href="{{ url_for('cluster')}}">Cluster</a>
+            <a class="navbar-brand" href="{{ url_for('cluster')}}">Dendogram</a>
             <!-- <a class="navbar-brand" href="Schedule.php">Schedule</a> -->
     </ul>
     </div>
@@ -75,7 +75,7 @@
     <h1>PAPERS</h1>
    
 
-
+<div class="container_ver"> 
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
     <label class="form-check-label" for="cbox1">Show Title</label>
@@ -91,7 +91,7 @@
     <label class="form-check-label" for="cbox3">Show Abstract</label>
   </div>
 <br>
-
+</div>
  
   <br>
 
@@ -130,12 +130,12 @@
             </li>
             <li>
             <i class="bi bi-git"></i>
-               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Website CSV </a>
+               <a href="https://github.com/Freddy8-C/Proyecto_MachineLearning" target="_blank">Repository<br>CSV </a>
             </li>
 
             <li>
             <i class="bi bi-globe"></i>
-                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine  </a>
+                <a href="https://machinlearning2.herokuapp.com/" target="_blank">Website<br>Machine Learning</a>
             </li> 
 
             <li>
