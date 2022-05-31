@@ -1,5 +1,6 @@
 
-from flask import Flask, render_template
+from turtle import distance
+from flask import Flask, render_template,request
 import pandas as pd
 import re
 import nltk 
@@ -24,6 +25,9 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import AgglomerativeClustering
+import scipy.cluster.hierarchy as shc
 
 n = stopwords.words("english")
 stemmer = PorterStemmer()
@@ -2488,12 +2492,12 @@ def tot_grafo(num):
     
     return render_template("MDS.php")
 
-@app.route('/Cluster')
+@app.route('/Cluster/', methods=["GET", "POST"])
 def cluster():
     abstract = importacion_columnas("Abstract")
     titulos = importacion_columnas("Titles")
     keyword = importacion_columnas("Keywords")
-    titles_aux = importacion_columnas("Titles")
+    
          #Normalizacion
 
     titulos = caracter_especiales(titulos)
@@ -2614,54 +2618,38 @@ def cluster():
         #print(matriz_resultante)
         #print(type(matriz_resultante))
     columa =[]
-    llenardoc(len(matriz_resultante),columa)
-    mds = MDS(metric=True, dissimilarity='euclidean', random_state=0)
-    X_transform = mds.fit_transform(matriz_resultante)
-    x, y = X_transform[:, 0], X_transform[:, 1]
-    fig, ax = plt.subplots()
-  
-    clustering = KMeans(n_clusters=4,max_iter=300) #se crea el modelo
-    clustering.fit(X_transform) #aplico al modleo creado
-  
-    print(X_transform)
-   
-   
-   
-    df = pd.DataFrame()
-    cont=0
-    cont1=0
-    cont2=0
-    cont3=0
-    for i in range(len(X_transform)):
-          df = df.append({'first_name': titles_aux[i]}, ignore_index=True) 
-    
-    df['KMeans_Clusters'] = clustering.labels_
-    for i in range (len(df['KMeans_Clusters'])):
-        if df['KMeans_Clusters'][i] == 0:
-            cont=cont+1
-        if df['KMeans_Clusters'][i] == 1:
-            cont1=cont1+1
-        if df['KMeans_Clusters'][i] == 2:
-            cont2=cont2+1
-        if df['KMeans_Clusters'][i] == 3:
-            cont3=cont3+1            
-                    
+    #llenardoc(len(matriz_resultante),columa)
+    altura=2
+    if request.method == 'POST':
+         altura = request.form['name']
+    altura = float(altura)
+    print(altura)
 
-    pca = PCA(n_components=2)
-    pca_vinos = pca.fit_transform(X_transform)
-    pca_vinos_df = pd.DataFrame(data = pca_vinos, columns=["Component_1","Component_2"])
-    pca_nombres_vinos = pd.concat([pca_vinos_df,df[["KMeans_Clusters"]]],axis=1)
-    
- 
-    ax.set_title("Clustering",fontsize=15)
-    color_theme = np.array(["blue","green","orange","red"])
-    ax.scatter(x =  pca_nombres_vinos.Component_1,y=pca_nombres_vinos.Component_2, c = color_theme[pca_nombres_vinos.KMeans_Clusters],s=20)
-    
-    figure = ax.get_figure()
+    fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+    linked = linkage(matriz_resultante,'complete')
+    dend = dendrogram(linked,
+                            orientation='top',
+                            distance_sort='descending',
+                           show_leaf_counts=True,
+                            color_threshold=altura
+
+                            )
+    #shc.dendrogram(shc.linkage(matriz_resultante, method='ward'))
+    ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+    titulos_aux = importacion_columnas("Titles")
+    aux = []
+    for i in range (len(dend['leaves'])):
+        aux.append(titulos_aux[int(dend['leaves'][i])-1])
+        figure = fig.get_figure()
     figure.savefig('static/img/cluster.png')
-    
+    resultantList = []
  
-    return render_template("Cluster.php",data=df['first_name'],clust=df['KMeans_Clusters'],tam=len(df['first_name']),cont=cont,cont1=cont1,cont2=cont2,cont3=cont3)
+    for element in dend['leaves_color_list']:
+        if element not in resultantList:
+            resultantList.append(element)
+
+ 
+    return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
 
 
 if __name__ == '__main__':

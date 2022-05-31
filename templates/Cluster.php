@@ -50,34 +50,13 @@
  
 
     <h1>CLUSTERING</h1>
-<div class="container_leyenda">
-    <div class="titulo"> 
-        <div class="circulo"></div> 
-            <aside>     
-                Cluster 0
-            </aside>
-    </div>
-    <br>
-    <div class="titulo"> 
-        <div class="circulo1"></div> 
-            <aside>     
-                Cluster 1
-            </aside>
-    </div>
-    <br>
-    <div class="titulo"> 
-        <div class="circulo2"></div> 
-            <aside>       
-                Cluster 2
-            </aside>
-    </div>
-    <br>
-    <div class="titulo"> 
-        <div class="circulo3"></div> 
-            <aside>       
-                Cluster 3
-            </aside>
-    </div>
+    <div>
+<form action="" method="post">
+
+        <label for="name">Grupos: </label>
+        <input type="number" id="name"  step="0.5" pattern="^\d*(\.\d{0,2})?$" name="name" min=1 required /><br>
+        <input type="submit" id="send-signup" name="signup" value="Enviar" />
+</form>
 </div>
     <div id="wrapper" style="margin-top: 50px">
         <canvas id="myCanvas1" width="800" height="500">
@@ -89,32 +68,24 @@
 
 
 
-
+    <style>
+.mystyle {
+  display:none;
+}
+</style>
 
 <div class="magenTop" style="margin-top: 50px">     
 <div class="container_leyenda"> 
     <div class="container_checkbox">
+    {%for i in range(0, tam2)%}
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cbox0" checked>
-            <label class="form-check-label" for="cbox0" id="text_cluster">Cluster 0 = {{cont}}  </label>
+            <input class="form-check-input" type="checkbox" role="switch" id="{{resultantList[i]}}" checked>
+            <label class="form-check-label " for="cbox0" id="{{resultantList[i]}}"> Cluster: {{resultantList[i]}}</label>
         </div>
-        <br>    
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cbox1" checked>
-            <label class="form-check-label" for="cbox1" id="text_cluster1">Cluster 1 = {{cont1}} </label>
-        </div>
-        <br>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cbox2" checked>
-            <label class="form-check-label" for="cbox2" id="text_cluster2">Cluster 2 = {{cont2}}</label>
-        </div>
-        <br>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cbox3" checked>
-            <label class="form-check-label" for="cbox3" id="text_cluster3">Cluster 3 = {{cont3}}</label>
-        </div>
-        <br>
+        <br>  
+        {%endfor%}  
     </div>
+    
 </div> 
 </div>   
     
