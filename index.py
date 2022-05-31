@@ -1822,15 +1822,19 @@ def tot_dendogr(num):
         return render_template("Dendrogram.php",matriz_keywords = np.around(matriz_abs_50,2), tam =len(matriz_abs_50))
     
     
-@app.route('/MDS')
+@app.route('/MDS', methods=["GET", "POST"])
 def grafo():
     return render_template("MDS.php")
 
-@app.route('/MDS/<num>')
+@app.route('/MDS/<num>', methods=["GET", "POST"])
 def tot_grafo(num):
     abstract = importacion_columnas("Abstract")
     titulos = importacion_columnas("Titles")
     keyword = importacion_columnas("Keywords")
+    tipo_distancia="euclidean"
+    if request.method == 'POST':
+            tipo_distancia = request.form['carlist']
+    print(tipo_distancia)
     if(num == '1'):
         abstract = importacion_columnas("Abstract")
         titulos = importacion_columnas("Titles")
@@ -2494,163 +2498,954 @@ def tot_grafo(num):
 
 @app.route('/Cluster/', methods=["GET", "POST"])
 def cluster():
-    abstract = importacion_columnas("Abstract")
-    titulos = importacion_columnas("Titles")
-    keyword = importacion_columnas("Keywords")
-    
-         #Normalizacion
-
-    titulos = caracter_especiales(titulos)
-    titulos = minusculas(titulos)
-
-    keyword = caracter_especiales(keyword)
-    keyword = minusculas(keyword)
-
-    abstract = caracter_especiales(abstract)
-    abstract = minusculas(abstract)
-
-        #Tokenizacion
-
-    titulos = tokenizacion(titulos)
-    keyword = tokenizacion(keyword)
-    abstract = tokenizacion(abstract)
-
-        #Stopwords
-    titulos = eliminar_stop_words(titulos)
-    keyword = eliminar_stop_words(keyword)
-    abstract = eliminar_stop_words(abstract)
-
-        #Stemming
-
-    titulos = stemming(titulos)
-    keyword = stemming(keyword)
-    abstract = stemming(abstract)
-
-    
-    matriz = np.zeros((len(titulos), len(titulos)))
-    matriz_keywords = np.zeros((len(keyword), len(keyword)))
-    llenar_identidad(matriz)
-    llenar_identidad(matriz_keywords)
-    jacard(titulos,matriz)
-    jacard(keyword,matriz_keywords)
-    ##### Matriz de distancias de titulos ########
-    #print(matriz)
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
         
-    ##### Matriz de distancias de keywords ########")
-    #print(matriz_keywords)
-    vocabulario = []
-    generar_vocabulario(abstract, vocabulario)
-    matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
-    frecuencia = []
-    lista_wtf = [] 
-    lista_df = []   
-    lista_idf = []  
-    lista_tf_idf = []  
-    lista_modulo = [] 
-    lista_normal = []   
-    lista_abstract_final =[]   
-    frecuencias(vocabulario, abstract,frecuencia)
-        #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
-    llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
-    llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
-        #########Term Frecuency#############")
-        #print(matriz_df_idf)
-    print()
-        #########Weight Document Frecuency#############")
-    matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
-    calcular_wtf(frecuencia, lista_wtf)
-    llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
-    llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
-        #print(matriz_wtf)
-    print()
-        #########Document Frecuency#############")
-    matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
-    calcular_df(lista_wtf, lista_df,vocabulario)
-    llenar_palabras_documentos(vocabulario, abstract, matriz_df)
-    llenar_matriz2(lista_df,matriz_df,"DF: ")
-        #print(matriz_df)
-    print()
-        #########Inverse Document Frecuency#############")
-    matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
-    calcular_idf(lista_df, abstract, lista_idf)
-    llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
-    llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
-        #print(matriz_idf)
-    print()
-        ######### TF - IDF#############")
-    matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
-    calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
-    lista_tf_idf =redondear(lista_tf_idf)
-    llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
-    llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
-        #print(matriz_tf_idf)
-    print()
-        ######### Matriz de distancias abstract #############")
-        ####Modulo de la raiz normalizacion
-    modulo_raiz(lista_wtf, lista_modulo, vocabulario)
-    lista_normalizada(lista_wtf, lista_modulo,lista_normal)
-    lista_normal =redondear(lista_normal)
+            #Normalizacion
 
-        ###### Matriz de distancias Abstract #######
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
 
-    matriz_distancia_abstrac(lista_normal,lista_abstract_final)
-    matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
-    llenar_matriz_Distancias(matriz_distancia_abs)
-    llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
-    llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
-        #print(matriz_distancia_abs)
-    print()
-        ##### Matriz de distancias de titulos con 20%  ########")
-    matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
-        #print(matriz_tit_20)
-    print()
-        ##### Matriz de distancias de keywords con 30%  ########")
-    matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
-        #print(matriz_key_30)
-    print()
-        ######### Matriz de distancias abstract 50%#############")
-    matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
-        #print(matriz_abs_50)
-    print()
-    matriz_aux = np.add(matriz_tit_20,matriz_key_30)
-    matriz_resultante = np.add(matriz_aux,matriz_abs_50)
-        #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
-        #print(matriz_resultante)
-        #print(type(matriz_resultante))
-    columa =[]
-    #llenardoc(len(matriz_resultante),columa)
-    altura=2
-    if request.method == 'POST':
-         altura = request.form['name']
-    altura = float(altura)
-    print(altura)
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
 
-    fig, ax = plt.subplots(1, 1, figsize=(8, 4))
-    linked = linkage(matriz_resultante,'complete')
-    dend = dendrogram(linked,
-                            orientation='top',
-                            distance_sort='descending',
-                           show_leaf_counts=True,
-                            color_threshold=altura
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
 
-                            )
-    #shc.dendrogram(shc.linkage(matriz_resultante, method='ward'))
-    ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
-    titulos_aux = importacion_columnas("Titles")
-    aux = []
-    for i in range (len(dend['leaves'])):
-        aux.append(titulos_aux[int(dend['leaves'][i])-1])
-        figure = fig.get_figure()
-    figure.savefig('static/img/cluster.png')
-    resultantList = []
- 
-    for element in dend['leaves_color_list']:
-        if element not in resultantList:
-            resultantList.append(element)
+            #Tokenizacion
 
- 
-    return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
 
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+        print(altura)
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+
+@app.route('/Cluster/<num>', methods=["GET", "POST"])
+def cluster2(num):
+    if(num =="1"):
+    
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        
+            #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+            #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+        print(altura)
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+
+    if(num=="2"):
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        abstract = abstract[0:48]
+        titulos = titulos[0:48]
+        keyword = keyword[0:48]
+            #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+            #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+        print(altura)
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+    if(num=="3"):
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        abstract = abstract[48:96]
+        titulos = titulos[48:96]
+        keyword = keyword[48:96]
+            #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+            #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+        print(altura)
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+    if(num=="4"):
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        abstract = abstract[96:144]
+        titulos = titulos[96:144]
+        keyword = keyword[96:144]
+            #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+            #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+        print(altura)
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
+    if(num=="5"):
+        abstract = importacion_columnas("Abstract")
+        titulos = importacion_columnas("Titles")
+        keyword = importacion_columnas("Keywords")
+        abstract = abstract[144:192]
+        titulos = titulos[144:192]
+        keyword = keyword[144:192]
+            #Normalizacion
+
+        titulos = caracter_especiales(titulos)
+        titulos = minusculas(titulos)
+
+        keyword = caracter_especiales(keyword)
+        keyword = minusculas(keyword)
+
+        abstract = caracter_especiales(abstract)
+        abstract = minusculas(abstract)
+
+            #Tokenizacion
+
+        titulos = tokenizacion(titulos)
+        keyword = tokenizacion(keyword)
+        abstract = tokenizacion(abstract)
+
+            #Stopwords
+        titulos = eliminar_stop_words(titulos)
+        keyword = eliminar_stop_words(keyword)
+        abstract = eliminar_stop_words(abstract)
+
+            #Stemming
+
+        titulos = stemming(titulos)
+        keyword = stemming(keyword)
+        abstract = stemming(abstract)
+
+        
+        matriz = np.zeros((len(titulos), len(titulos)))
+        matriz_keywords = np.zeros((len(keyword), len(keyword)))
+        llenar_identidad(matriz)
+        llenar_identidad(matriz_keywords)
+        jacard(titulos,matriz)
+        jacard(keyword,matriz_keywords)
+        ##### Matriz de distancias de titulos ########
+        #print(matriz)
+            
+        ##### Matriz de distancias de keywords ########")
+        #print(matriz_keywords)
+        vocabulario = []
+        generar_vocabulario(abstract, vocabulario)
+        matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        frecuencia = []
+        lista_wtf = [] 
+        lista_df = []   
+        lista_idf = []  
+        lista_tf_idf = []  
+        lista_modulo = [] 
+        lista_normal = []   
+        lista_abstract_final =[]   
+        frecuencias(vocabulario, abstract,frecuencia)
+            #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df_idf)
+        llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+            #########Term Frecuency#############")
+            #print(matriz_df_idf)
+        print()
+            #########Weight Document Frecuency#############")
+        matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_wtf(frecuencia, lista_wtf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_wtf)
+        llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+            #print(matriz_wtf)
+        print()
+            #########Document Frecuency#############")
+        matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_df(lista_wtf, lista_df,vocabulario)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_df)
+        llenar_matriz2(lista_df,matriz_df,"DF: ")
+            #print(matriz_df)
+        print()
+            #########Inverse Document Frecuency#############")
+        matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+        calcular_idf(lista_df, abstract, lista_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_idf)
+        llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+            #print(matriz_idf)
+        print()
+            ######### TF - IDF#############")
+        matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstract)+1),dtype=object)
+        calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+        lista_tf_idf =redondear(lista_tf_idf)
+        llenar_palabras_documentos(vocabulario, abstract, matriz_tf_idf)
+        llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+            #print(matriz_tf_idf)
+        print()
+            ######### Matriz de distancias abstract #############")
+            ####Modulo de la raiz normalizacion
+        modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+        lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+        lista_normal =redondear(lista_normal)
+
+            ###### Matriz de distancias Abstract #######
+
+        matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+        matriz_distancia_abs = np.zeros((len(abstract),len(abstract)))
+        llenar_matriz_Distancias(matriz_distancia_abs)
+        llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+        llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+            #print(matriz_distancia_abs)
+        print()
+            ##### Matriz de distancias de titulos con 20%  ########")
+        matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+            #print(matriz_tit_20)
+        print()
+            ##### Matriz de distancias de keywords con 30%  ########")
+        matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+            #print(matriz_key_30)
+        print()
+            ######### Matriz de distancias abstract 50%#############")
+        matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+            #print(matriz_abs_50)
+        print()
+        matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+        matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+            #print("######### Matriz de distancias con la sumatoria de titulos,keywords y abstrac#############")
+            #print(matriz_resultante)
+            #print(type(matriz_resultante))
+        columa =[]
+        altura=2
+        if request.method == 'POST':
+            altura = request.form['name']
+        altura = float(altura)
+       
+
+        fig, ax = plt.subplots(1, 1, figsize=(8, 4))
+        linked = linkage(matriz_resultante,'complete')
+        dend = dendrogram(linked,
+                                orientation='top',
+                                distance_sort='descending',
+                            show_leaf_counts=True,
+                                color_threshold=altura
+
+                                )
+
+        ax.axhline(y=altura, c = 'black', linestyle='--', label='altura corte')
+        titulos_aux = importacion_columnas("Titles")
+        aux = []
+        for i in range (len(dend['leaves'])):
+            aux.append(titulos_aux[int(dend['leaves'][i])-1])
+            figure = fig.get_figure()
+        figure.savefig('static/img/cluster.png')
+        resultantList = []
+    
+        for element in dend['leaves_color_list']:
+            if element not in resultantList:
+                resultantList.append(element)
+
+    
+        return render_template("Cluster.php",tam=len(aux),data=aux,clust=dend['leaves_color_list'],tam2=len(resultantList),resultantList=resultantList)
 
 if __name__ == '__main__':
     app.run()
