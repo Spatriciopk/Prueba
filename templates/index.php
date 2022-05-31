@@ -57,7 +57,24 @@
     </nav>
     
  
-
+    <h1>DESCRIPTION OF THE PROJECT</h1>
+<div id="abstract"> 
+    <div id="abstract1">
+In this website a comparative analysis of the similarity of three main documents will be carried out,
+which are the following: social sciences, computer science, medicine, and exact sciences with their 
+fifteen references, using three variables (title, summary and keywords). <br>
+Once the database is made, we proceed to make the processes and analysis of the documents with the 
+same topics, each document goes through the NLP process, to obtain a database ready to use, then the
+ process of similarity between documents of the same type, distance matrix of documents, graphs to 
+ indicate the distance matrix of the entire database and each document, also runs a clustering task 
+ using the DHC algorithm with the purpose that each document must show some graph that identifies the 
+ resulting articles and a list with the titles of the articles of each group. <br>
+In this case, Visual Studio Code has been used, as it is an application that helps the creation of
+ programs through Python, and the construction of the dataset was also made by the members of the group
+  themselves, it contains different diagrams to have a better abstraction of the program and the project
+   in general, to understand each of the implemented algorithms.
+   </div>
+</div> 
 
 
 
